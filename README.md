@@ -10,7 +10,7 @@ pip install tpy
 ## Usage
 
 ```
-usage: tpy [-h] [-s SESSION] [-w WINDOW] {cmd,cmd_prev,pytest,python} ...
+usage: tpy [-h] [-s SESSION] [-w WINDOW] [-r] {cmd,cmd_prev,pytest,python} ...
 
 Runs command in tmux
 
@@ -20,9 +20,11 @@ positional arguments:
 optional arguments:
   -h, --help            Usage info
   -s SESSION, --session SESSION
-                        tmux session to use
+                        Session to use
   -w WINDOW, --window WINDOW
-                        tmux window to use
+                        Window to use
+  -r, --reset           Resets window before execution, killing running
+                        processes
 
 
 usage: tpy cmd command
@@ -34,14 +36,13 @@ positional arguments:
 
 
 
-usage: tpy cmd_prev [-t TIMES_UP] [-r]
+usage: tpy cmd_prev [-t TIMES_UP]
 
 Runs previous command
 
 optional arguments:
   -t TIMES_UP, --times_up TIMES_UP
                         Number of times to press cursor up
-  -r, --reset           Resets window before execution, kills running programs
 
 
 

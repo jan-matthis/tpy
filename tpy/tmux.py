@@ -47,9 +47,8 @@ def get_window(session, window_name=None, reset=False):
                 return window
             else:
                 session.kill_window(window_name)
-    
-    window = session.new_window(
-        attach=True, window_name=window_name)
+
+    window = session.new_window(attach=True, window_name=window_name)
 
     return window
 
