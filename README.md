@@ -1,5 +1,14 @@
 # tpy
 
+## Installation
+
+```bash
+pip install tpy
+```
+
+
+## Usage
+
 ```
 usage: tpy [-h] [-s SESSION] [-w WINDOW] {cmd,cmd_prev,pytest,python} ...
 
