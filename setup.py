@@ -17,7 +17,6 @@ URL = 'https://github.com/jan-matthis/tpy'
 EMAIL = 'mail@jan-matthis.de'
 AUTHOR = 'Jan-Matthis Lueckmann'
 REQUIRES_PYTHON = '>=2.7.0'
-VERSION = '0.1.0'
 
 REQUIRED = [
     "libtmux"
@@ -34,12 +33,9 @@ except FileNotFoundError:
     long_description = DESCRIPTION
 
 about = {}
-if not VERSION:
-    project_slug = NAME.lower().replace("-", "_").replace(" ", "_")
-    with open(os.path.join(here, project_slug, '__version__.py')) as f:
-        exec(f.read(), about)
-else:
-    about['__version__'] = VERSION
+project_slug = NAME.lower().replace("-", "_").replace(" ", "_")
+with open(os.path.join(here, project_slug, '__version__.py')) as f:
+    exec(f.read(), about)
 
 
 class UploadCommand(Command):
