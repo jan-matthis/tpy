@@ -100,7 +100,7 @@ def run_cmd_prev(args):
 def run_pytest(args):
     assert not (args.pdb and args.ipdb)
 
-    cmd = f"{args.cmd} {args.file_or_dir}"
+    cmd = f"{args.executable} {args.file_or_dir}"
 
     if args.keyword is not None:
         cmd += f" -k {args.keyword}"
@@ -119,7 +119,7 @@ def run_pytest(args):
 def run_python(args):
     assert not (args.pdb and args.ipdb)
 
-    cmd = f"{args.cmd}"
+    cmd = f"{args.executable}"
     if args.interactive:
         cmd += " -i"
     if args.ipdb:
