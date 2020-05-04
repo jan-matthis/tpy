@@ -11,12 +11,12 @@ def execute(cmd, session_name, window_name, reset_window=True):
     pane.cmd("send-keys", "enter")
 
 
-def execute_prev(session_name, window_name, reset_window=True, times_up=1):
+def execute_prev(session_name, window_name, reset_window=True, cursor_up=1):
     session = get_session(session_name)
     window = get_window(session, window_name, reset=reset_window)
     pane = get_pane_attached(window)
 
-    for _ in range(times_up):
+    for _ in range(cursor_up):
         pane.cmd("send-keys", "up")
     pane.cmd("send-keys", "enter")
 
