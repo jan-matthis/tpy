@@ -7,8 +7,8 @@ server = libtmux.Server()
 
 def execute(cmd, session_name, window_name, reset=True, dir=None, dry=False):
     session = get_session(session_name)
-    window = get_window(session, window_name, reset=reset)
-    pane = get_pane_attached(window, reset=False)
+    window = get_window(session, window_name)
+    pane = get_pane(window, reset=reset)
     pane.cmd("send-keys", change_dir(cmd, dir))
     if not dry:
         pane.cmd("send-keys", "enter")
@@ -16,8 +16,8 @@ def execute(cmd, session_name, window_name, reset=True, dir=None, dry=False):
 
 def execute_prev(session_name, window_name, reset=True, cursor_up=1, dry=False):
     session = get_session(session_name)
-    window = get_window(session, window_name, reset=reset)
-    pane = get_pane_attached(window, reset=False)
+    window = get_window(session, window_name)
+    pane = get_pane(window, reset=reset)
     for _ in range(cursor_up):
         pane.cmd("send-keys", "up")
     if not dry:
@@ -56,11 +56,14 @@ def get_window(session, window_name=None, reset=False):
     return window
 
 
-def get_pane_attached(window, reset=False):
+def get_pane(window, reset=False):
     pane = window.attached_pane
-    if reset:
-        pane.clear()
-    return pane
+    if not reset:
+        return pane
+    else:
+        new_pane = window.split_window(target=pane.id)
+        pane.cmd('kill-pane')
+        return new_pane
 
 
 def change_dir(cmd, dir=None):
