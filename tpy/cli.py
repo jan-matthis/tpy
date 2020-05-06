@@ -35,6 +35,11 @@ def main():
         help="If present, will change into this directory for execution"
     )
     parser.add_argument(
+        "--dry",
+        action="store_true",
+        help="Will not execute command, i.e., not press enter",
+    )
+    parser.add_argument(
         "-h", "--help", 
         action=_HelpAction, 
         help="Usage info"
@@ -127,11 +132,11 @@ def main():
 def run_cmd(args):
     cmd = f"{args.command}"
 
-    execute(cmd, args.session, args.window, args.reset, args.dir)
+    execute(cmd, args.session, args.window, args.reset, args.dir, args.dry)
 
 
 def run_cmd_prev(args):
-    execute_prev(args.session, args.window, args.reset, args.cursor_up)
+    execute_prev(args.session, args.window, args.reset, args.cursor_up, args.dry)
 
 
 def run_pytest(args):
