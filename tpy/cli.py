@@ -26,7 +26,7 @@ def main():
     parser.add_argument(
         "--reset",
         action="store_true",
-        help="Resets window before execution, killing running processes",
+        help="Resets before execution, killing running processes",
     )
     parser.add_argument(
         "--dir", 
@@ -146,7 +146,7 @@ def run_pytest(args):
     if args.ipdb:
         cmd += " --pdb --pdbcls=IPython.terminal.debugger:Pdb"
 
-    execute(cmd, args.session, args.window, args.reset, args.dir)
+    execute(cmd, args.session, args.window, args.reset, args.dir, args.dry)
 
 
 def run_python(args):
@@ -161,7 +161,7 @@ def run_python(args):
         cmd += " -m pdb -c continue"
     cmd += f" {args.file}"
 
-    execute(cmd, args.session, args.window, args.reset, args.dir)
+    execute(cmd, args.session, args.window, args.reset, args.dir, args.dry)
 
 
 if __name__ == "__main__":

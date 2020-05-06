@@ -5,22 +5,22 @@ import libtmux
 server = libtmux.Server()
 
 
-def execute(cmd, session_name, window_name, reset_window=True, dir=None, dry=False):
+def execute(cmd, session_name, window_name, reset=True, dir=None, dry=False):
     session = get_session(session_name)
-    window = get_window(session, window_name, reset=reset_window)
-    pane = get_pane_attached(window)
+    window = get_window(session, window_name, reset=reset)
+    pane = get_pane_attached(window, reset=False)
     pane.cmd("send-keys", change_dir(cmd, dir))
-    if not args.dry:
+    if not dry:
         pane.cmd("send-keys", "enter")
 
 
-def execute_prev(session_name, window_name, reset_window=True, cursor_up=1, dry=False):
+def execute_prev(session_name, window_name, reset=True, cursor_up=1, dry=False):
     session = get_session(session_name)
-    window = get_window(session, window_name, reset=reset_window)
-    pane = get_pane_attached(window)
+    window = get_window(session, window_name, reset=reset)
+    pane = get_pane_attached(window, reset=False)
     for _ in range(cursor_up):
         pane.cmd("send-keys", "up")
-    if not args.dry:
+    if not dry:
         pane.cmd("send-keys", "enter")
 
 
@@ -56,8 +56,11 @@ def get_window(session, window_name=None, reset=False):
     return window
 
 
-def get_pane_attached(window):
-    return window.attached_pane
+def get_pane_attached(window, reset=False):
+    pane = window.attached_pane
+    if reset:
+        pane.clear()
+    return pane
 
 
 def change_dir(cmd, dir=None):
