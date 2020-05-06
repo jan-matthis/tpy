@@ -1,13 +1,15 @@
+import os
+
 import libtmux
 
 server = libtmux.Server()
 
 
-def execute(cmd, session_name, window_name, reset_window=True):
+def execute(cmd, session_name, window_name, reset_window=True, dir=None):
     session = get_session(session_name)
     window = get_window(session, window_name, reset=reset_window)
     pane = get_pane_attached(window)
-    pane.cmd("send-keys", cmd)
+    pane.cmd("send-keys", change_dir(cmd, dir))
     pane.cmd("send-keys", "enter")
 
 
@@ -15,7 +17,6 @@ def execute_prev(session_name, window_name, reset_window=True, cursor_up=1):
     session = get_session(session_name)
     window = get_window(session, window_name, reset=reset_window)
     pane = get_pane_attached(window)
-
     for _ in range(cursor_up):
         pane.cmd("send-keys", "up")
     pane.cmd("send-keys", "enter")
@@ -55,3 +56,9 @@ def get_window(session, window_name=None, reset=False):
 
 def get_pane_attached(window):
     return window.attached_pane
+
+
+def change_dir(cmd, dir=None):
+    if dir is not None:
+        cmd = "cd " + os.path.dirname(os.path.abspath(dir)) + "; "+ cmd
+    return cmd

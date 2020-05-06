@@ -29,6 +29,12 @@ def main():
         help="Resets window before execution, killing running processes",
     )
     parser.add_argument(
+        "--dir", 
+        type=str, 
+        default=None, 
+        help="If present, will change into this directory for execution"
+    )
+    parser.add_argument(
         "-h", "--help", 
         action=_HelpAction, 
         help="Usage info"
@@ -121,7 +127,7 @@ def main():
 def run_cmd(args):
     cmd = f"{args.command}"
 
-    execute(cmd, args.session, args.window, args.reset)
+    execute(cmd, args.session, args.window, args.reset, args.dir)
 
 
 def run_cmd_prev(args):
@@ -135,7 +141,7 @@ def run_pytest(args):
     if args.ipdb:
         cmd += " --pdb --pdbcls=IPython.terminal.debugger:Pdb"
 
-    execute(cmd, args.session, args.window, args.reset)
+    execute(cmd, args.session, args.window, args.reset, args.dir)
 
 
 def run_python(args):
@@ -150,7 +156,7 @@ def run_python(args):
         cmd += " -m pdb -c continue"
     cmd += f" {args.file}"
 
-    execute(cmd, args.session, args.window, args.reset)
+    execute(cmd, args.session, args.window, args.reset, args.dir)
 
 
 if __name__ == "__main__":
