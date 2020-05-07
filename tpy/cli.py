@@ -34,12 +34,6 @@ def main():
         help="Resets pane before execution",
     )
     parser.add_argument(
-        "--dir", 
-        type=str, 
-        default=None, 
-        help="Changes into directory for execution"
-    )
-    parser.add_argument(
         "--dry",
         action="store_true",
         help="Will send but not execute commands",
@@ -94,7 +88,6 @@ def run_cmd(args):
         None,
         args.reset_window,
         args.reset_pane,
-        args.dir,
         args.dry,
     )
 

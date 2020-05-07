@@ -13,7 +13,7 @@ See `tpy --help`:
 
 ```
 usage: tpy [--session SESSION] [--window WINDOW] [--reset-window]
-           [--reset-pane] [--dir DIR] [--dry] [-h]
+           [--reset-pane] [--dry] [-h]
            {cmd,again} ...
 
 Runs commands in tmux.
@@ -26,7 +26,6 @@ optional arguments:
   --window WINDOW    Name of window to use
   --reset-window     Resets window before execution
   --reset-pane       Resets pane before execution
-  --dir DIR          Changes into directory for execution
   --dry              Will send but not execute commands
   -h, --help         Usage info
 

@@ -12,7 +12,6 @@ def execute(
     pane=None,
     reset_window=False,
     reset_pane=False,
-    dir=None,
     dry=False,
 ):
     session_ = get_session(session)
