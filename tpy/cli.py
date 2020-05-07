@@ -161,26 +161,37 @@ def run_cmd_prev(args):
 def run_pytest(args):
     cmd = f"{args.executable} {args.file_or_dir}"
     cmd += f" {' '.join(args.unknownargs)}"
-
     if args.ipdb:
         cmd += " --pdb --pdbcls=IPython.terminal.debugger:Pdb"
-
-    execute(cmd, args.session, args.window, args.reset, args.dir, args.dry)
+    execute(
+        cmd,
+        args.session,
+        args.window,
+        args.reset_window,
+        args.reset_pane,
+        args.dir,
+        args.dry,
+    )
 
 
 def run_python(args):
     assert not (args.pdb and args.ipdb)
-
     cmd = f"{args.executable}"
     cmd += f" {' '.join(args.unknownargs)}"
-
     if args.ipdb:
         cmd += " -m ipdb -c continue"
     if args.pdb:
         cmd += " -m pdb -c continue"
     cmd += f" {args.file}"
-
-    execute(cmd, args.session, args.window, args.reset, args.dir, args.dry)
+    execute(
+        cmd,
+        args.session,
+        args.window,
+        args.reset_window,
+        args.reset_pane,
+        args.dir,
+        args.dry,
+    )
 
 
 if __name__ == "__main__":
