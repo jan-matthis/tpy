@@ -1,5 +1,3 @@
-import os
-
 import libtmux
 
 server = libtmux.Server()
@@ -17,7 +15,7 @@ def execute(
     session_ = get_session(session)
     window_ = get_window(session_, window_name=window, reset=reset_window)
     pane_ = get_pane(window_, pane_id=pane, reset=reset_pane)
-    pane_.cmd("send-keys", change_dir(cmd, dir))
+    pane_.cmd("send-keys", cmd)
     if not dry:
         pane_.cmd("send-keys", "enter")
 
@@ -82,9 +80,3 @@ def get_pane(window, pane_id=None, reset=False):
             new_pane = window.split_window(target=pane.id)
             pane.cmd("kill-pane")
             return new_pane
-
-
-def change_dir(cmd, dir=None):
-    if dir is not None:
-        cmd = "cd " + os.path.dirname(os.path.abspath(dir)) + "; " + cmd
-    return cmd
