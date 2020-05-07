@@ -5,19 +5,34 @@ import libtmux
 server = libtmux.Server()
 
 
-def execute(cmd, session_name, window_name, reset=True, dir=None, dry=False):
+def execute(
+    cmd,
+    session_name,
+    window_name,
+    reset_window=False,
+    reset_pane=False,
+    dir=None,
+    dry=False,
+):
     session = get_session(session_name)
-    window = get_window(session, window_name)
-    pane = get_pane(window, reset=reset)
+    window = get_window(session, window_name, reset=reset_window)
+    pane = get_pane(window, reset=reset_pane)
     pane.cmd("send-keys", change_dir(cmd, dir))
     if not dry:
         pane.cmd("send-keys", "enter")
 
 
-def execute_prev(session_name, window_name, reset=True, cursor_up=1, dry=False):
+def execute_prev(
+    session_name,
+    window_name,
+    reset_window=False,
+    reset_pane=False,
+    cursor_up=1,
+    dry=False,
+):
     session = get_session(session_name)
-    window = get_window(session, window_name)
-    pane = get_pane(window, reset=reset)
+    window = get_window(session, window_name, reset=reset_window)
+    pane = get_pane(window, reset=reset_pane)
     for _ in range(cursor_up):
         pane.cmd("send-keys", "up")
     if not dry:
@@ -62,11 +77,11 @@ def get_pane(window, reset=False):
         return pane
     else:
         new_pane = window.split_window(target=pane.id)
-        pane.cmd('kill-pane')
+        pane.cmd("kill-pane")
         return new_pane
 
 
 def change_dir(cmd, dir=None):
     if dir is not None:
-        cmd = "cd " + os.path.dirname(os.path.abspath(dir)) + "; "+ cmd
+        cmd = "cd " + os.path.dirname(os.path.abspath(dir)) + "; " + cmd
     return cmd

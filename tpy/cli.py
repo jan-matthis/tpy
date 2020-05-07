@@ -8,7 +8,7 @@ def main():
     # fmt: off
     parser = argparse.ArgumentParser(
         prog="tpy", 
-        description="Runs command in tmux", 
+        description="Runs commands in tmux.", 
         add_help=False
     )
     parser.add_argument(
@@ -24,20 +24,25 @@ def main():
         help="Window to use"
     )
     parser.add_argument(
-        "--reset",
+        "--reset-window",
         action="store_true",
-        help="Resets before execution, killing running processes",
+        help="Resets window before execution",
+    )
+    parser.add_argument(
+        "--reset-pane",
+        action="store_true",
+        help="Resets pane before execution",
     )
     parser.add_argument(
         "--dir", 
         type=str, 
         default=None, 
-        help="If present, will change into this directory for execution"
+        help="Changes into directory for execution"
     )
     parser.add_argument(
         "--dry",
         action="store_true",
-        help="Will not execute command, i.e., not press enter",
+        help="Will send but not execute commands",
     )
     parser.add_argument(
         "-h", "--help", 
@@ -50,7 +55,7 @@ def main():
 
     parser_cmd = subparsers.add_parser(
         "cmd", 
-        description="Runs arbitrary command", 
+        description="Runs arbitrary command.", 
         add_help=False
     )
     parser_cmd.add_argument(
@@ -60,19 +65,19 @@ def main():
     )
     parser_cmd.set_defaults(func=run_cmd)
 
-    parser_cmd_prev = subparsers.add_parser(
-        "cmd_prev", 
-        description="Runs previous command", 
+    parser_again = subparsers.add_parser(
+        "again", 
+        description="Runs previous command again.", 
         add_help=False
     )
-    parser_cmd_prev.add_argument(
-        "-cu",
-        "--cursor_up",
+    parser_again.add_argument(
+        "-tu",
+        "--times-up",
         type=int,
         default=1,
         help="Number of times to press cursor up",
     )
-    parser_cmd_prev.set_defaults(func=run_cmd_prev)
+    parser_again.set_defaults(func=run_cmd_prev)
 
     parser_pytest = subparsers.add_parser(
         "pytest", 
@@ -122,8 +127,8 @@ def main():
         help="Enables ipdb"
     )
     parser_python.set_defaults(func=run_python)
-
     # fmt: on
+
     args, unknownargs = parser.parse_known_args()
     args.unknownargs = unknownargs
     args.func(args)
@@ -131,18 +136,32 @@ def main():
 
 def run_cmd(args):
     cmd = f"{args.command}"
-
-    execute(cmd, args.session, args.window, args.reset, args.dir, args.dry)
+    execute(
+        cmd,
+        args.session,
+        args.window,
+        args.reset_window,
+        args.reset_pane,
+        args.dir,
+        args.dry,
+    )
 
 
 def run_cmd_prev(args):
-    execute_prev(args.session, args.window, args.reset, args.cursor_up, args.dry)
+    execute_prev(
+        args.session,
+        args.window,
+        args.reset_window,
+        args.reset_pane,
+        args.times_up,
+        args.dry,
+    )
 
 
 def run_pytest(args):
     cmd = f"{args.executable} {args.file_or_dir}"
     cmd += f" {' '.join(args.unknownargs)}"
-    
+
     if args.ipdb:
         cmd += " --pdb --pdbcls=IPython.terminal.debugger:Pdb"
 
