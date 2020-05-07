@@ -7,36 +7,38 @@ server = libtmux.Server()
 
 def execute(
     cmd,
-    session_name,
-    window_name,
+    session,
+    window=None,
+    pane=None,
     reset_window=False,
     reset_pane=False,
     dir=None,
     dry=False,
 ):
-    session = get_session(session_name)
-    window = get_window(session, window_name, reset=reset_window)
-    pane = get_pane(window, reset=reset_pane)
-    pane.cmd("send-keys", change_dir(cmd, dir))
+    session_ = get_session(session)
+    window_ = get_window(session_, window_name=window, reset=reset_window)
+    pane_ = get_pane(window_, pane_id=pane, reset=reset_pane)
+    pane_.cmd("send-keys", change_dir(cmd, dir))
     if not dry:
-        pane.cmd("send-keys", "enter")
+        pane_.cmd("send-keys", "enter")
 
 
 def execute_prev(
-    session_name,
-    window_name,
+    session,
+    window=None,
+    pane=None,
     reset_window=False,
     reset_pane=False,
     cursor_up=1,
     dry=False,
 ):
-    session = get_session(session_name)
-    window = get_window(session, window_name, reset=reset_window)
-    pane = get_pane(window, reset=reset_pane)
+    session_ = get_session(session)
+    window_ = get_window(session_, window_name=window, reset=reset_window)
+    pane_ = get_pane(window_, pane_id=pane, reset=reset_pane)
     for _ in range(cursor_up):
-        pane.cmd("send-keys", "up")
+        pane_.cmd("send-keys", "up")
     if not dry:
-        pane.cmd("send-keys", "enter")
+        pane_.cmd("send-keys", "enter")
 
 
 def get_session(session_name, create=True):
@@ -71,14 +73,16 @@ def get_window(session, window_name=None, reset=False):
     return window
 
 
-def get_pane(window, reset=False):
-    pane = window.attached_pane
-    if not reset:
-        return pane
-    else:
-        new_pane = window.split_window(target=pane.id)
-        pane.cmd("kill-pane")
-        return new_pane
+def get_pane(window, pane_id=None, reset=False):
+    assert pane_id is None
+    if pane_id is None:
+        pane = window.attached_pane
+        if not reset:
+            return pane
+        else:
+            new_pane = window.split_window(target=pane.id)
+            pane.cmd("kill-pane")
+            return new_pane
 
 
 def change_dir(cmd, dir=None):
