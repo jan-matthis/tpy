@@ -19,7 +19,7 @@ AUTHOR = 'Jan-Matthis Lueckmann'
 REQUIRES_PYTHON = '>=2.7.0'
 
 REQUIRED = [
-    "libtmux"
+    "libtmux", "keyboard"
 ]
 
 EXTRAS = {}

@@ -3,6 +3,8 @@ import argparse
 from tpy.tmux import execute, execute_prev
 from tpy.utils import _HelpAction
 
+import keyboard
+
 
 def main():
     # fmt: off
@@ -12,16 +14,34 @@ def main():
         add_help=False
     )
     parser.add_argument(
-        "--session", 
-        type=str, 
-        default="tpy", 
-        help="Name of session to use"
-    )
-    parser.add_argument(
-        "--window", 
+        "--socket-name", 
         type=str, 
         default=None, 
-        help="Name of window to use"
+        help="Socket name"
+    )
+    parser.add_argument(
+        "--socket-path", 
+        type=str, 
+        default=None, 
+        help="Socket path"
+    )
+    parser.add_argument(
+        "--session-name", 
+        type=str, 
+        default="tpy", 
+        help="Session name"
+    )
+    parser.add_argument(
+        "--window-name", 
+        type=str, 
+        default=None, 
+        help="Window name"
+    )
+    parser.add_argument(
+        "--hotkey", 
+        type=str, 
+        default=None, 
+        help="Register and wait for hotkey. Requires `sudo` invocation."
     )
     parser.add_argument(
         "--reset-window",
@@ -37,6 +57,11 @@ def main():
         "--dry",
         action="store_true",
         help="Will send but not execute commands",
+    )
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Debugging info",
     )
     parser.add_argument(
         "-h", "--help", 
@@ -57,7 +82,7 @@ def main():
         type=str, 
         help="Command to execute"
     )
-    parser_cmd.set_defaults(func=run_cmd)
+    parser_cmd.set_defaults(func=execute)
 
     parser_again = subparsers.add_parser(
         "again", 
@@ -71,37 +96,17 @@ def main():
         default=1,
         help="Number of times to press cursor up",
     )
-    parser_again.set_defaults(func=run_cmd_prev)
+    parser_again.set_defaults(func=execute_prev)
     # fmt: on
 
     args, unknownargs = parser.parse_known_args()
     args.unknownargs = unknownargs
+
+    if args.hotkey is not None:
+        keyboard.add_hotkey(args.hotkey, args.func, (args,))
+        keyboard.wait()
+
     args.func(args)
-
-
-def run_cmd(args):
-    cmd = f"{args.command}"
-    execute(
-        cmd,
-        args.session,
-        args.window,
-        None,
-        args.reset_window,
-        args.reset_pane,
-        args.dry,
-    )
-
-
-def run_cmd_prev(args):
-    execute_prev(
-        args.session,
-        args.window,
-        None,
-        args.reset_window,
-        args.reset_pane,
-        args.times_up,
-        args.dry,
-    )
 
 
 if __name__ == "__main__":

@@ -1,44 +1,41 @@
 import libtmux
 
-server = libtmux.Server()
+
+def setup(args):
+    if args.debug:
+        print(args)
+
+    server = get_server(socket_name=args.socket_name, socket_path=args.socket_path)
+    session = get_session(server=server, session_name=args.session_name)
+    window = get_window(
+        session=session, window_name=args.window_name, reset=args.reset_window
+    )
+    pane = get_pane(window=window, reset=args.reset_pane)
+
+    return server, session, window, pane
 
 
-def execute(
-    cmd,
-    session,
-    window=None,
-    pane=None,
-    reset_window=False,
-    reset_pane=False,
-    dry=False,
-):
-    session_ = get_session(session)
-    window_ = get_window(session_, window_name=window, reset=reset_window)
-    pane_ = get_pane(window_, pane_id=pane, reset=reset_pane)
-    pane_.cmd("send-keys", cmd)
-    if not dry:
-        pane_.cmd("send-keys", "enter")
+def execute(args):
+    sever, session, window, pane = setup(args)
+    cmd = f"{args.command}"
+    pane.cmd("send-keys", cmd)
+    if not args.dry:
+        pane.cmd("send-keys", "enter")
 
 
-def execute_prev(
-    session,
-    window=None,
-    pane=None,
-    reset_window=False,
-    reset_pane=False,
-    cursor_up=1,
-    dry=False,
-):
-    session_ = get_session(session)
-    window_ = get_window(session_, window_name=window, reset=reset_window)
-    pane_ = get_pane(window_, pane_id=pane, reset=reset_pane)
-    for _ in range(cursor_up):
-        pane_.cmd("send-keys", "up")
-    if not dry:
-        pane_.cmd("send-keys", "enter")
+def execute_prev(args):
+    sever, session, window, pane = setup(args)
+    for _ in range(args.times_up):
+        pane.cmd("send-keys", "up")
+    if not args.dry:
+        pane.cmd("send-keys", "enter")
 
 
-def get_session(session_name, create=True):
+def get_server(socket_name=None, socket_path=None):
+    return libtmux.Server(socket_name=socket_name, socket_path=socket_path)
+
+
+def get_session(server, session_name, create=True):
     if server.has_session(session_name):
         session = server.find_where({"session_name": session_name})
     else:

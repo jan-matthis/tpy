@@ -12,8 +12,10 @@ pip install tpy
 See `tpy --help`:
 
 ```
-usage: tpy [--session SESSION] [--window WINDOW] [--reset-window]
-           [--reset-pane] [--dry] [-h]
+usage: tpy [--socket-name SOCKET_NAME] [--socket-path SOCKET_PATH]
+           [--session-name SESSION_NAME] [--window-name WINDOW_NAME]
+           [--hotkey HOTKEY] [--reset-window] [--reset-pane] [--dry] [--debug]
+           [-h]
            {cmd,again} ...
 
 Runs commands in tmux.
@@ -22,12 +24,21 @@ positional arguments:
   {cmd,again}
 
 optional arguments:
-  --session SESSION  Name of session to use
-  --window WINDOW    Name of window to use
-  --reset-window     Resets window before execution
-  --reset-pane       Resets pane before execution
-  --dry              Will send but not execute commands
-  -h, --help         Usage info
+  --socket-name SOCKET_NAME
+                        Socket name
+  --socket-path SOCKET_PATH
+                        Socket path
+  --session-name SESSION_NAME
+                        Session name
+  --window-name WINDOW_NAME
+                        Window name
+  --hotkey HOTKEY       Register and wait for hotkey. Requires `sudo`
+                        invocation.
+  --reset-window        Resets window before execution
+  --reset-pane          Resets pane before execution
+  --dry                 Will send but not execute commands
+  --debug               Debugging info
+  -h, --help            Usage info
 
 
 usage: tpy cmd command
