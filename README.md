@@ -1,3 +1,6 @@
+[![PyPI version](https://badge.fury.io/py/tpy.svg)](https://badge.fury.io/py/tpy)
+[![GitHub license](https://img.shields.io/github/license/jan-matthis/tpy)](https://github.com/jan-matthis/tpy/blob/master/LICENSE)
+
 # tpy
 
 ## Installation
