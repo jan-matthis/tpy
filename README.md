@@ -61,3 +61,7 @@ optional arguments:
   -tu TIMES_UP, --times-up TIMES_UP
                         Number of times to press cursor up
 ```
+
+## License
+
+MIT
